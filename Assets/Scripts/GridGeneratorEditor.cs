@@ -14,5 +14,9 @@ public class GridGeneratorEditor : Editor
         {
             gridGenerator.GenerateGrids();
         }
+        if (GUILayout.Button("Clear Grids!"))
+        {
+            gridGenerator.ClearCurrentCells();
+        }
     }
 }

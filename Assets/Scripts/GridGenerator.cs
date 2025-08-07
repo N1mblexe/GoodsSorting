@@ -7,6 +7,7 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] private List<List<GameObject>> currentCells = new List<List<GameObject>>();
     [SerializeField] private Vector2 cellSize = Vector2.one;
     [SerializeField] private Vector2Int size;
+    [SerializeField] private float spacing = .1f;
     private static readonly Vector2Int[] sizeLimites = new Vector2Int[]
     {
         new Vector2Int(2, 2),
@@ -54,7 +55,7 @@ public class GridGenerator : MonoBehaviour
 
     }
 
-    private void ClearCurrentCells()
+    public void ClearCurrentCells()
     {
         //if (currentCells == null)
         //{
@@ -83,22 +84,22 @@ public class GridGenerator : MonoBehaviour
     /// <returns></returns>
     private Vector2 CalculateCellPos(Vector2Int size, Vector2 cellPos)
     {
-        //cell pos is out of bounds
-        if ((size.x < cellPos.x || size.y < cellPos.y) || (cellPos.x < 0 || cellPos.y < 0))
+        if ((size.x <= cellPos.x || size.y <= cellPos.y) || (cellPos.x < 0 || cellPos.y < 0))
             return Vector2.negativeInfinity;
+
+        Vector2 spacedCellSize = new Vector2(cellSize.x + spacing, cellSize.y + spacing);
 
         Vector2 originOffset = new Vector2
         (
-            ((size.x - 1) * cellSize.x) / 2,
-            ((size.y - 1) * cellSize.y) / 2
+            ((size.x - 1) * spacedCellSize.x) / 2f,
+            ((size.y - 1) * spacedCellSize.y) / 2f
         );
 
         Vector2 position = new Vector2
         (
-            (cellPos.x * cellSize.x) - originOffset.x,
-            (cellPos.y * cellSize.y) - originOffset.y
+            (cellPos.x * spacedCellSize.x) - originOffset.x,
+            (cellPos.y * spacedCellSize.y) - originOffset.y
         );
-
 
         return position;
     }
