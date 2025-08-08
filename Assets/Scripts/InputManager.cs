@@ -1,8 +1,12 @@
+using Grid;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
     [SerializeField] private GameObject currentObj;
+    [SerializeField] private Item selectedItem = null;
+
     private void Update()
     {
         HandleMouseInteraction();
@@ -14,7 +18,7 @@ public class InputManager : MonoBehaviour
         IInteractable interactable = hitObject?.GetComponent<IInteractable>();
 
         HandleHoverChange(hitObject, interactable);
-        HandleHoverAndClick(interactable);
+        HandleHoverAndClick(interactable, hitObject);
     }
 
     #region HelperFunctions
@@ -45,7 +49,7 @@ public class InputManager : MonoBehaviour
         currentObj = hitObject;
     }
 
-    private void HandleHoverAndClick(IInteractable interactable)
+    private void HandleHoverAndClick(IInteractable interactable, GameObject gameObject)
     {
         if (interactable == null)
             return;
@@ -57,16 +61,54 @@ public class InputManager : MonoBehaviour
         else if (Input.GetMouseButton(0))
             OnClick(interactable);
         else if (Input.GetMouseButtonUp(0))
-            OnClickExit(interactable);
+            OnClickExit(interactable, gameObject);
     }
     #endregion
 
     #region Events
-    public void OnClickEnter(IInteractable button) => button.OnClickEnter();
-    public void OnClick(IInteractable button) => button.OnClick();
-    public void OnClickExit(IInteractable button) => button.OnClickExit();
-    public void OnHoverEnter(IInteractable button) => button.OnHoverEnter();
-    public void OnHover(IInteractable button) => button.OnHover();
-    public void OnHoverExit(IInteractable button) => button.OnHoverExit();
+    public void OnClickEnter(IInteractable interactable) => interactable.OnClickEnter();
+    public void OnClick(IInteractable interactable) => interactable.OnClick();
+    public void OnClickExit(IInteractable interactable, GameObject gameObject)
+    {
+        interactable.OnClickExit();
+        Utilities.InteractableID id = interactable.GetID();
+
+        if (id == Utilities.InteractableID.ITEM)
+        {
+            var currentItem = gameObject.GetComponent<Item>();
+            if (selectedItem == null)
+                selectedItem = currentItem;
+            else
+                TryTransferItem(selectedItem, currentItem.GetCurrentCell());
+        }
+        if (id == Utilities.InteractableID.CELL && selectedItem != null)
+            TryTransferItem(selectedItem, gameObject.GetComponent<Cell>());
+
+    }
+
+    //TODO make a seperate class for the transferring items or move it to the goods manager 
+    public void TryTransferItem(Item item, Cell cell)
+    {
+        if (item == null || cell == null)
+        {
+            Debug.LogError("Null value error");
+            return;
+        }
+
+        if (item.GetCurrentCell() == cell)
+        {
+            Debug.LogWarning("Clicked on current cell");
+            return;
+        }
+
+        item.GetCurrentCell().RemoveItemFromGoods(item);
+        if (cell.AddItem(item))
+            selectedItem = null;
+
+    }
+
+    public void OnHoverEnter(IInteractable interactable) => interactable.OnHoverEnter();
+    public void OnHover(IInteractable interactable) => interactable.OnHover();
+    public void OnHoverExit(IInteractable interactable) => interactable.OnHoverExit();
     #endregion
 }

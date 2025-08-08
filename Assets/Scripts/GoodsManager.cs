@@ -7,6 +7,9 @@ public class GoodsManager : MonoBehaviour
 
     //TODO REMOVE THIS
     [SerializeField] private GameObject tempItemPrefab;
+
+    public static readonly uint maxGoodsPerCell = 3;
+
     public static GoodsManager Instance;
     void Awake()
     {
@@ -31,9 +34,11 @@ public class GoodsManager : MonoBehaviour
             {
                 var goods = new Item[] {
                     Instantiate(tempItemPrefab).GetComponent<Item>(),
-                    Instantiate(tempItemPrefab).GetComponent<Item>(),
-                    Instantiate(tempItemPrefab).GetComponent<Item>(),
+                    Instantiate(tempItemPrefab).GetComponent<Item>()
                  };
+
+                goods[0].SetCurrentCell(cell);
+                goods[1].SetCurrentCell(cell);
 
                 cell.SetGoods(goods);
             }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public interface IInteractable
 {
     public void OnClickEnter() { }
@@ -7,4 +9,6 @@ public interface IInteractable
     public void OnHoverEnter() { }
     public void OnHover() { }
     public void OnHoverExit() { }
+
+    public Utilities.InteractableID GetID();
 }

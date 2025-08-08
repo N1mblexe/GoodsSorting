@@ -14,6 +14,7 @@ public sealed class GameManager : MonoBehaviour
     //    var action = _mainThreadActions.Dequeue();
     //    action?.Invoke();
     //}
+
     [Obsolete]
     public static Thread StartGameAsync()
     {
