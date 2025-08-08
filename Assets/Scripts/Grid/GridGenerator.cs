@@ -5,10 +5,21 @@ namespace Grid
 {
     public class GridGenerator : MonoBehaviour
     {
+        public static GridGenerator Instance;
+        void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+            else
+                Debug.LogError("Multiple Instance of GridGenerator!!");
+        }
+
+
         [Header("CELL")]
         [SerializeField] private GameObject cellPrefab;
 
         [SerializeField] private List<List<GameObject>> currentCells = new List<List<GameObject>>();
+        public List<List<GameObject>> getCurrentCells() { return currentCells; }
 
         [SerializeField] private Vector2 cellSize = Vector2.one;
 
