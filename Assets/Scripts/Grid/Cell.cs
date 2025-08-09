@@ -19,14 +19,12 @@ namespace Grid
         [SerializeField] private Vector2 itemSize = new Vector2(.5f, .2f);
         private Vector2 originOffset;
 
-        void Start()
-        {
-            originOffset = new Vector2
-            (
-                ((maxGoods - 1) * itemSize.x) / 2f,
-                ((maxGoods - 1) * itemSize.y) / 2f
-            );
-        }
+        void Awake() => originOffset = new Vector2
+        (
+            ((maxGoods - 1) * itemSize.x) / 2f,
+            ((maxGoods - 1) * itemSize.y) / 2f
+        );
+
         public void SetGoods(Item[] goods)
         {
             if (goods == null)
@@ -50,6 +48,9 @@ namespace Grid
             item.SetCurrentCell(this);
 
             RecalculatePositions();
+            if (GameManager.getGameState() == Utilities.GameState.PLAYING && CheckSituation())
+                CloseCell();
+
             return true;
         }
 
@@ -68,13 +69,13 @@ namespace Grid
         }
 
         //TODO : Make a ease anim for this
-        public void RecalculatePositions()
+        private void RecalculatePositions()
         {
             for (int i = 0; i < this.goods.Count; i++)
                 this.goods[i].transform.position = CalculatePosition(i);
         }
 
-        public Vector3 CalculatePosition(int positionId)
+        private Vector3 CalculatePosition(int positionId)
         {
             return new Vector3
             (
@@ -83,11 +84,25 @@ namespace Grid
                 transform.position.z - 1
             );
         }
-
-        //TODO remove this if not necessary
-        public void SetGoods(Item first = null, Item second = null, Item third = null)
+        private bool CheckSituation()
         {
-            SetGoods(new Item[] { first, second, third });
+            if (goods.Count != maxGoods)
+                return false;
+
+            uint id = goods[0].getItemID();
+            foreach (var item in goods)
+            {
+                if (id != item.getItemID())
+                    return false;
+            }
+
+            return true;
+        }
+
+        //TODO make this more interesting
+        private void CloseCell()
+        {
+            gameObject.SetActive(false);
         }
 
         public Utilities.InteractableID GetID() { return Utilities.InteractableID.CELL; }

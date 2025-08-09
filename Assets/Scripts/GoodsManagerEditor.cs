@@ -13,7 +13,7 @@ public class GoodsManagerEditor : Editor
 
         if (GUILayout.Button("Generate Goods!"))
         {
-            goodsManager.SetGoods(GameManager.GetCellsFromObject(GridGenerator.Instance.getCurrentCells()));
+            //goodsManager.SetGoods(GameManager.GetCellsFromObject(GridGenerator.Instance.getCurrentCells()));
         }
         //Clear
         //if (GUILayout.Button("Clear goods!"))

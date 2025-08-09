@@ -6,6 +6,15 @@ using UnityEngine;
 
 public sealed class GameManager : MonoBehaviour
 {
+    private enum Difficulty { EASY = 40, NORMAL = 60, HARD = 90 }
+    [SerializeField] private static uint difficulty = (uint)Difficulty.NORMAL.GetHashCode();
+    private static Utilities.GameState gameState;
+    public static Utilities.GameState getGameState() { return gameState; }
+    public static void SetDifficulty(uint percentage)
+    {
+        if (percentage >= 10 && percentage <= 95)
+            difficulty = percentage;
+    }
 
     //use _mainThreadActions.Enqueue for unity dependant utils
     //also use this in update function
@@ -14,7 +23,6 @@ public sealed class GameManager : MonoBehaviour
     //    var action = _mainThreadActions.Dequeue();
     //    action?.Invoke();
     //}
-
     [Obsolete]
     public static Thread StartGameAsync()
     {
@@ -33,12 +41,14 @@ public sealed class GameManager : MonoBehaviour
 
         List<List<Cell>> cells = GetCellsFromObject(grid);
 
-        goodsManager.SetGoods(cells);
+        goodsManager.SetGoods(cells, difficulty);
     }
 
     void Start()
     {
+        gameState = Utilities.GameState.LOADING;
         StartGame();
+        gameState = Utilities.GameState.PLAYING;
     }
 
 

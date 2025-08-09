@@ -163,7 +163,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b322619658a8f284b1242a25a80a8bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tempItemPrefab: {fileID: 3415747802052171342, guid: 4d850c0105ba84cccaec7acabe9ce080, type: 3}
+  itemPrefabs:
+  - {fileID: 7500876232330290647, guid: 4d850c0105ba84cccaec7acabe9ce080, type: 3}
+  - {fileID: 7500876232330290647, guid: 46ca2785cb874697b8cb7ee870ebf806, type: 3}
+  - {fileID: 7500876232330290647, guid: 89922ef49f30b662393c2e2985d0ab83, type: 3}
+  - {fileID: 7500876232330290647, guid: b4fdb5f8ae3dfc1d0935fc0babda4c38, type: 3}
+  - {fileID: 7500876232330290647, guid: 9c13fce28a8d86636b38fe6f01217187, type: 3}
+  - {fileID: 7500876232330290647, guid: 4b63dd97a1bc94064adfe61840e7d04d, type: 3}
+  - {fileID: 7500876232330290647, guid: 8651c0fd6f12e5b489b44d6874cd2c3b, type: 3}
+  seed: 1111
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentObj: {fileID: 0}
+  selectedItem: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
