@@ -170,8 +170,7 @@ MonoBehaviour:
   - {fileID: 7500876232330290647, guid: b4fdb5f8ae3dfc1d0935fc0babda4c38, type: 3}
   - {fileID: 7500876232330290647, guid: 9c13fce28a8d86636b38fe6f01217187, type: 3}
   - {fileID: 7500876232330290647, guid: 4b63dd97a1bc94064adfe61840e7d04d, type: 3}
-  - {fileID: 7500876232330290647, guid: 8651c0fd6f12e5b489b44d6874cd2c3b, type: 3}
-  seed: 1111
+  seed: 1000
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,10 +516,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 7988468258377993115, guid: e3cecce85eedbef3a81593b6595acba9, type: 3}
-  cellSize: {x: 1, y: 1}
+  cellSize: {x: 2, y: 1}
   sizeBoundaries:
   - {x: 2, y: 2}
-  - {x: 16, y: 9}
+  - {x: 10, y: 8}
   size: {x: 8, y: 3}
   spacing: 0.1
 --- !u!1 &2141619305

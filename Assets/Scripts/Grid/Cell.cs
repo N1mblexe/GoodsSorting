@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,7 +16,7 @@ namespace Grid
         private static uint maxGoods = GoodsManager.maxGoodsPerCell;
         protected List<Item> goods = new List<Item>();
 
-        [SerializeField] private float spacing = .05f;
+        [SerializeField] private float spacing = .1f;
         [SerializeField] private Vector2 itemSize = new Vector2(.5f, .2f);
         private Vector2 originOffset;
 
@@ -47,12 +48,16 @@ namespace Grid
             item.transform.parent = this.transform;
             item.SetCurrentCell(this);
 
-            RecalculatePositions();
-            if (GameManager.getGameState() == Utilities.GameState.PLAYING && CheckSituation())
-                CloseCell();
+            RecalculatePositions(() =>
+            {
+                if (GameManager.getGameState() == Utilities.GameState.PLAYING && CheckSituation())
+                    CloseCell();
+            });
 
             return true;
         }
+
+
 
         /// <summary>
         /// Only removes from array , so handle it carefully
@@ -68,12 +73,23 @@ namespace Grid
             RecalculatePositions();
         }
 
-        //TODO : Make a ease anim for this
-        private void RecalculatePositions()
+        private void RecalculatePositions(TweenCallback onComplete = null)
         {
+            float moveDuration = (GameManager.getGameState() == Utilities.GameState.LOADING) ? .3f : .5f;
+            Ease moveEase = Ease.OutQuad;
+
             for (int i = 0; i < this.goods.Count; i++)
-                this.goods[i].transform.position = CalculatePosition(i);
+            {
+                Vector3 targetPos = CalculatePosition(i);
+                var tween = this.goods[i].transform.DOMove(targetPos, moveDuration)
+                                                  .SetEase(moveEase);
+
+                if (i == this.goods.Count - 1 && onComplete != null)
+                    tween.OnComplete(onComplete);
+            }
         }
+
+
 
         private Vector3 CalculatePosition(int positionId)
         {

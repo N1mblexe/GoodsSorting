@@ -33,8 +33,14 @@ public class InputManager : MonoBehaviour
 
     private void HandleHoverChange(GameObject hitObject, IInteractable interactable)
     {
+        if (interactable.GetID() == Utilities.InteractableID.ITEM && selectedItem != null)
+        {
+            currentObj = hitObject;
+            return;
+        }
         if (currentObj == hitObject)
             return;
+
 
         if (currentObj != null)
         {
@@ -52,6 +58,9 @@ public class InputManager : MonoBehaviour
     private void HandleHoverAndClick(IInteractable interactable, GameObject gameObject)
     {
         if (interactable == null)
+            return;
+
+        if (interactable.GetID() == Utilities.InteractableID.ITEM && selectedItem != null)
             return;
 
         OnHover(interactable);
@@ -77,7 +86,10 @@ public class InputManager : MonoBehaviour
         {
             var currentItem = gameObject.GetComponent<Item>();
             if (selectedItem == null)
+            {
                 selectedItem = currentItem;
+                selectedItem.Select();
+            }
             else
                 TryTransferItem(selectedItem, currentItem.GetCurrentCell());
         }
@@ -103,7 +115,10 @@ public class InputManager : MonoBehaviour
 
         item.GetCurrentCell().RemoveItemFromGoods(item);
         if (cell.AddItem(item))
+        {
+            selectedItem.UnSelect();
             selectedItem = null;
+        }
 
     }
 
